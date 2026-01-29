@@ -1,0 +1,28 @@
+if (e.getSource() == convertButton) {
+            String fielValue = textBox.getText();
+            ProgramFunctions pFunction = new ProgramFunctions();
+
+            //fielValue = fielValue.replaceAll("[a-z]", "");
+            //fielValue = fielValue.replaceAll("[A-Z]", "");
+
+            if (fielValue.trim().isEmpty()){
+                resultLabel.setText("Campo Vazio");
+                return;
+            }
+
+            if (!fielValue.matches("[0-9.,]+")){
+                resultLabel.setText("Digite Apenas Numeros");
+                textBox.setText("");
+                return;
+            }
+
+            if (!fielValue.matches("[,]+")){
+                fielValue = fielValue.replaceAll(",", ".");
+            }
+
+            String finalValue = String.valueOf(pFunction.convert(Double.parseDouble(fielValue)));
+            resultLabel.setText("Resultado: " + finalValue);
+
+        } else if (e.getSource() == swithCurrencyButton) {
+            System.out.println("swithCurrencyButton");
+        }

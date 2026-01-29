@@ -1,9 +1,15 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 
 
 public class ApiConnect {
@@ -14,6 +20,7 @@ public class ApiConnect {
     public static void urlBuild(String urlComplement){
         builtUrl = "";
         builtUrl = url + urlComplement;
+        System.out.println(builtUrl);
     }
 
     public static void ApiConnect(){
@@ -27,16 +34,65 @@ public class ApiConnect {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(builtUrl))
                 .header("Authorization", "268972ea18fe0a79e2aa0ee2") // Set request headers
-                .GET() // Specify the HTTP method
+                .GET()
                 .build();
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Status Code: " + response.statusCode());
+            //System.out.println("Status Code: " + response.statusCode());
             //System.out.println("Response Body: " + response.body());
-            apiResponse = response.body();
+            //apiResponse = response.body();
+            String jsonData = response.body();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.create();
+            Response resObject = gson.fromJson(jsonData, Response.class);
+            System.out.println(resObject);
+            apiResponse = resObject.getRe();
         } catch (IOException | InterruptedException e){
             e.printStackTrace();
         }
 
+    }
+}
+
+class ReadFile{
+    public static String[] getFileContent() {
+        ArrayList<String> contrys = new ArrayList<>();
+        String fileName = "C:\\Users\\andre.oliveira\\IdeaProjects\\conversor_de_moedas\\src\\main\\java\\contrys.txt";
+        // Use try-with-resources to ensure the reader is closed automatically
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Process the line (e.g., print it, store it in a list)
+                //System.out.println(line);
+                contrys.add(line);
+            }
+        } catch (IOException e) {
+            // Handle exceptions like file not found or read errors
+            System.err.println("Error reading file: " + e.getMessage());
+            e.printStackTrace();
+        }
+        String[] stringList = contrys.toArray(new String[0]);
+        return stringList;
+    }
+}
+
+class Response{
+    private String re;
+
+    public Response(String re){
+        this.re = re;
+    }
+
+    public String getRe(){
+        return re;
+    }
+
+    public void setre(String re){
+        this.re = re;
+    }
+
+    @Override
+    public String toString(){
+        return "Response{" + "conversion_result=" + re + "}";
     }
 }

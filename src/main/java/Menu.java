@@ -9,14 +9,13 @@ public class Menu extends JFrame implements ActionListener {
     JButton swithCurrencyButton = new JButton("Trocar");
     JTextField textBox = new JTextField(10);
     JLabel resultLabel = new JLabel("Resultado: ");
-    String[] choice1 = {"Option 1", "Option 2", "Option 3", "Option 4"};
-    String[] choice2 = {"Option 1", "Option 2", "Option 3", "Option 4"};
+    String[] choice1 = ReadFile.getFileContent();
+    String[] choice2 = ReadFile.getFileContent();
 
     final JComboBox<String> cb1 = new JComboBox<>(choice1);
     final JComboBox<String> cb2 = new JComboBox<>(choice2);
 
     public Menu() {
-        ProgramFunctions.getCurrency();
         super("Conversor de Moeda");
         setSize(500, 300);
         setLocationRelativeTo(null);
@@ -48,12 +47,13 @@ public class Menu extends JFrame implements ActionListener {
         convertButton.addActionListener(this);
         swithCurrencyButton.addActionListener(this);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getSource());
         if (e.getSource() == convertButton) {
             String fielValue = textBox.getText();
             ProgramFunctions pFunction = new ProgramFunctions();
+
             //fielValue = fielValue.replaceAll("[a-z]", "");
             //fielValue = fielValue.replaceAll("[A-Z]", "");
 
@@ -72,8 +72,12 @@ public class Menu extends JFrame implements ActionListener {
                 fielValue = fielValue.replaceAll(",", ".");
             }
 
-            String finalValue = String.valueOf(pFunction.convert(Double.parseDouble(fielValue)));
-            resultLabel.setText("Resultado: " + finalValue);
+            ApiConnect.urlBuild("pair/" + cb1.getSelectedItem()
+                    + "/" + cb1.getSelectedItem() + "/" + fielValue);
+
+            ApiConnect.ApiConnect();
+            System.out.println(ApiConnect.apiResponse);
+            resultLabel.setText("Resultado: " + ApiConnect.apiResponse);
 
         } else if (e.getSource() == swithCurrencyButton) {
             System.out.println("swithCurrencyButton");
@@ -87,15 +91,9 @@ public class ProgramFunctions{
         double valor_dolar = 5.19;
         return value * valor_dolar;
     }
-
-    public static void getCurrency(){
-        System.out.println(ApiConnect.apiResponse.contains(""));
-    }
 }
 
 
 void main() {
-    ApiConnect.urlBuild("latest/USD");
-    ApiConnect.ApiConnect();
     javax.swing.SwingUtilities.invokeLater(() -> new Menu());
 }
