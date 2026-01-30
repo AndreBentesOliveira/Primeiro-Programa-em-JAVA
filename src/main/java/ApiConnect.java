@@ -42,11 +42,10 @@ public class ApiConnect {
             //System.out.println("Response Body: " + response.body());
             //apiResponse = response.body();
             String jsonData = response.body();
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            Gson gson = gsonBuilder.create();
-            Response resObject = gson.fromJson(jsonData, Response.class);
-            System.out.println(resObject);
-            apiResponse = resObject.getRe();
+            Gson gson = new Gson();
+            Response responseObj = gson.fromJson(jsonData, Response.class);
+            apiResponse = responseObj.getConversionResult();
+            System.out.println(apiResponse);
         } catch (IOException | InterruptedException e){
             e.printStackTrace();
         }
@@ -77,22 +76,17 @@ class ReadFile{
 }
 
 class Response{
-    private String re;
+    private String result;
+    private String documentation;
+    private String terms_of_use;
+    private int time_last_update_unix;
+    private String time_last_update_utc;
+    private int time_next_update_unix;
+    private String time_next_update_utc;
+    private String base_code;
+    private String target_code;
+    private double conversion_rate;
+    private String conversion_result;
 
-    public Response(String re){
-        this.re = re;
-    }
-
-    public String getRe(){
-        return re;
-    }
-
-    public void setre(String re){
-        this.re = re;
-    }
-
-    @Override
-    public String toString(){
-        return "Response{" + "conversion_result=" + re + "}";
-    }
+    public String getConversionResult() { return conversion_result; }
 }

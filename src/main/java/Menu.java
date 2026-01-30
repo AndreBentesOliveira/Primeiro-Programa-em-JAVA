@@ -17,32 +17,42 @@ public class Menu extends JFrame implements ActionListener {
 
     public Menu() {
         super("Conversor de Moeda");
-        setSize(500, 300);
+        setSize(500, 500);
         setLocationRelativeTo(null);
-
-        //BotoesComAcao actionButtons = new BotoesComAcao();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(null);
+        //setContentPane(new BackGround());
 
         JLabel Label1 = new JLabel("Converter de ");
         JLabel Label2 = new JLabel(" Para ");
-        JLabel convertType = new JLabel("Real -> Dolar");
-        JLabel empity = new JLabel("_-_-_-_-_-_-_");
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        JPanel panel = new JPanel();
+        JPanel panel2 = new JPanel();
+        JPanel panel3 = new JPanel();
 
-        panel.setSize(300, 300);
+        //panel.setSize(300, 300);
+        panel.setBackground(Color.red);
+        panel.setBounds(0, 0, 500, 500);
+
+        //panel2.setSize(300, 300);
+        /*panel2.setBackground(Color.blue);
+        panel2.setBounds(250, 0, 250, 250);
+
+        panel3.setBackground(Color.green);
+        panel3.setBounds(0, 250, 500, 250);*/
+
+        add(panel);
+       /* add(panel2);
+        add(panel3);*/
 
         panel.add(Label1);
         panel.add(cb1);
         panel.add(Label2);
-        panel.add(cb2, gbc);
-        panel.add(textBox, gbc);
-        panel.add(convertButton, gbc);
-        panel.add(swithCurrencyButton, gbc);
-        panel.add(resultLabel, gbc);
-
-        add(panel);
+        panel.add(cb2);
+        panel.add(textBox);
+        panel.add(convertButton);
+        panel.add(swithCurrencyButton);
+        panel.add(resultLabel);
         setVisible(true);
         convertButton.addActionListener(this);
         swithCurrencyButton.addActionListener(this);
@@ -73,7 +83,7 @@ public class Menu extends JFrame implements ActionListener {
             }
 
             ApiConnect.urlBuild("pair/" + cb1.getSelectedItem()
-                    + "/" + cb1.getSelectedItem() + "/" + fielValue);
+                    + "/" + cb2.getSelectedItem() + "/" + fielValue);
 
             ApiConnect.ApiConnect();
             System.out.println(ApiConnect.apiResponse);
@@ -93,6 +103,14 @@ public class ProgramFunctions{
     }
 }
 
+
+public class BackGround extends JPanel{
+    public void paintComponent(Graphics g) {
+        ImageIcon image = new ImageIcon("C:\\Users\\andre.oliveira\\IdeaProjects\\conversor_de_moedas\\src\\main\\resources\\background.png");
+        g.drawImage(image.getImage(), 0,0, 500, 500, null);
+
+    }
+}
 
 void main() {
     javax.swing.SwingUtilities.invokeLater(() -> new Menu());
