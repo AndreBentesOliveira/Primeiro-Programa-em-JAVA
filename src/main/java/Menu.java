@@ -3,12 +3,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class Menu extends JFrame implements ActionListener {
     JButton convertButton = new JButton("Converter");
     JButton swithCurrencyButton = new JButton("Trocar");
-    JTextField textBox = new JTextField(10);
+    JTextField textBox = new JTextField();
     JLabel resultLabel = new JLabel("Resultado: ");
+    JLabel lastUpdate = new JLabel("", SwingConstants.CENTER);
     String[] choice1 = ReadFile.getFileContent();
     String[] choice2 = ReadFile.getFileContent();
 
@@ -16,43 +16,77 @@ public class Menu extends JFrame implements ActionListener {
     final JComboBox<String> cb2 = new JComboBox<>(choice2);
 
     public Menu() {
+        //--------- FRAME CONFIG------------
         super("Conversor de Moeda");
-        setSize(500, 500);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(null);
-        //setContentPane(new BackGround());
+        setLayout(new BorderLayout(10, 10));
+        //----------------------------------
+
+        JLabel titleLabel = new JLabel("Conversor de Moedas", SwingConstants.CENTER);
+        JLabel valueLabel = new JLabel("Valor: ");
+        Font boldFont = new Font("Arial", Font.BOLD, 20);
+    
+
+        titleLabel.setFont(boldFont);
+        resultLabel.setFont(boldFont);
+        lastUpdate.setForeground(Color.gray);
 
         JLabel Label1 = new JLabel("Converter de ");
         JLabel Label2 = new JLabel(" Para ");
 
-        JPanel panel = new JPanel();
-        JPanel panel2 = new JPanel();
-        JPanel panel3 = new JPanel();
+        JPanel titlePanel = new JPanel();
+        JPanel contentPanel = new JPanel();
+        JPanel contryPanel = new JPanel();
+        JPanel valuePanel = new JPanel();
+        JPanel resultPanel = new JPanel();
 
-        //panel.setSize(300, 300);
-        panel.setBackground(Color.red);
-        panel.setBounds(0, 0, 500, 500);
+        JPanel marginLeft = new JPanel();
+        JPanel marginRight = new JPanel();
 
-        //panel2.setSize(300, 300);
-        /*panel2.setBackground(Color.blue);
-        panel2.setBounds(250, 0, 250, 250);
+        marginLeft.setPreferredSize(new Dimension(100, 100));
+        marginRight.setPreferredSize(new Dimension(100, 100));
 
-        panel3.setBackground(Color.green);
-        panel3.setBounds(0, 250, 500, 250);*/
 
-        add(panel);
-       /* add(panel2);
-        add(panel3);*/
 
-        panel.add(Label1);
-        panel.add(cb1);
-        panel.add(Label2);
-        panel.add(cb2);
-        panel.add(textBox);
-        panel.add(convertButton);
-        panel.add(swithCurrencyButton);
-        panel.add(resultLabel);
+        //titlePanel.setBackground(Color.gray);
+        titlePanel.setPreferredSize(new Dimension(100, 50));
+        titlePanel.setLayout(new BorderLayout());
+
+        contentPanel.setBackground(Color.lightGray);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+        //contryPanel.setBackground(Color.red);
+        //valuePanel.setBackground(Color.blue);
+        //resultPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        //contentPanel.setPreferredSize(new Dimension(100, 100));
+        textBox.setPreferredSize(new Dimension(100, 25));
+
+        add(marginLeft, BorderLayout.EAST);
+        add(marginRight, BorderLayout.WEST);
+
+        add(titlePanel, BorderLayout.NORTH);
+        add(contentPanel, BorderLayout.CENTER);
+    
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        contentPanel.add(contryPanel);
+        contentPanel.add(valuePanel);
+        contentPanel.add(resultPanel);
+
+        contryPanel.add(Label1);
+        contryPanel.add(cb1);
+        contryPanel.add(Label2);
+        contryPanel.add(cb2);
+
+        valuePanel.add(valueLabel);
+        valuePanel.add(textBox);
+        valuePanel.add(convertButton);
+        //contentPanel.add(swithCurrencyButton);
+
+        resultPanel.add(resultLabel);
+        resultPanel.add(lastUpdate);
+
         setVisible(true);
         convertButton.addActionListener(this);
         swithCurrencyButton.addActionListener(this);
@@ -88,6 +122,7 @@ public class Menu extends JFrame implements ActionListener {
             ApiConnect.ApiConnect();
             System.out.println(ApiConnect.apiResponse);
             resultLabel.setText("Resultado: " + ApiConnect.apiResponse);
+            lastUpdate.setText("Ultima atualização: " + ApiConnect.apiLastUpdate);
 
         } else if (e.getSource() == swithCurrencyButton) {
             System.out.println("swithCurrencyButton");

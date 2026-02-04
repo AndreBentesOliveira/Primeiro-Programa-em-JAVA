@@ -16,6 +16,7 @@ public class ApiConnect {
     static String url = "https://v6.exchangerate-api.com/v6/268972ea18fe0a79e2aa0ee2/";
     static String builtUrl = "";
     static String apiResponse;
+    static String apiLastUpdate;
 
     public static void urlBuild(String urlComplement){
         builtUrl = "";
@@ -45,6 +46,7 @@ public class ApiConnect {
             Gson gson = new Gson();
             Response responseObj = gson.fromJson(jsonData, Response.class);
             apiResponse = responseObj.getConversionResult();
+            apiLastUpdate = responseObj.getLastUpdate();
             System.out.println(apiResponse);
         } catch (IOException | InterruptedException e){
             e.printStackTrace();
@@ -89,4 +91,5 @@ class Response{
     private String conversion_result;
 
     public String getConversionResult() { return conversion_result; }
+    public String getLastUpdate(){return time_last_update_utc;}
 }
